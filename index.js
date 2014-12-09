@@ -10,6 +10,8 @@ var proxy = http.createServer(function(request, response){
 		headers: request.headers
 	}
 
+	console.log(request.url)
+
 	if(host == 'h5.iqg.com'){
 		options.port = 8000
 	}
@@ -17,15 +19,16 @@ var proxy = http.createServer(function(request, response){
 		options.port = 8081
 	}
 	else{
-		response.status(200).send('default server...')
+		response.statusCode = 200
+		response.write('default server...')
+		response.end()
 		return
 	}
 
-	var req = http.request(options, function(res){
+	http.request(options, function(res){
 
 		res.pipe(response)
 
-		console.log(request.url)
 	}).end()
 
 }).listen(80, function(){
